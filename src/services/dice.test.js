@@ -21,11 +21,11 @@ describe('roll fn', () => {
 
 describe('traitCheck fn', () => {
   it('returns expected values', () => {
-    // We assume each roll will come up the highest possible value
-    dice.roll = jest.fn(x => x);
+    // We assume each roll will come up the highest possible value.
+    const newRollFn = x => x;
     // Rolled values below 6 (included), return 6,
     // otherwise the other value
     for(let i = 1; i<13; i++)
-      expect(dice.traitCheck(i)).toBe(i < 6 ? 6 : i);
+      expect(dice.traitCheck(i, newRollFn)).toBe(i < 6 ? 6 : i);
   })
 });
