@@ -1,10 +1,8 @@
 {
-  "name": "savage",
+  "name": "savage-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "babel-eslint": "7",
-    "eslint": "3.x",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-scripts": "1.1.4"
