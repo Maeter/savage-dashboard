@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import SheetManager from './modules/sheet-manager';
+import RuleSearch from './modules/rule-search';
 import PerceptionCheck from './modules/perception-check';
 
 class App extends Component {
@@ -7,7 +7,7 @@ class App extends Component {
     return (
       <Fragment>
         <PerceptionCheck />
-        <SheetManager />
+        <RuleSearch />
       </Fragment>
     );
   }

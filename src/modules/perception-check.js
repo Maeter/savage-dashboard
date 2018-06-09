@@ -51,7 +51,11 @@ class PerceptionCheck extends Component {
   render() {
     return (
       <div className={'perception-check'}>
-        <p>Perception Check:</p>
+        <h3>Perception Check:</h3>
+        <input type="text" ref={nc => this.newCharacter = nc}/>
+        <button onClick={this.addCharacter}>Add character</button>
+        <br />
+        <br />
         {
           Object.keys(this.state.characters).map((name, i) => (
             <CharacterNotice
@@ -59,14 +63,11 @@ class PerceptionCheck extends Component {
               value={this.state.characters[name]}
               action={this.updateNotice(name)}
             >
-              {name.toUpperCase()}
+              {name}
             </CharacterNotice>
           ))
         }
         <br />
-        <input type="text" ref={nc => this.newCharacter = nc}/>
-        <br />
-        <button onClick={this.addCharacter}>Add character</button>
         <ul>
           {
             Object.keys(this.state.rolls).map((name, i) => (
