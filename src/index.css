@@ -1,5 +1,11 @@
+
 body {
+  background-color: #eee;
+  font-family: 'Roboto Slab', sans-serif;
+  font-weight: 300;
+  color: #333;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   margin: 0;
   padding: 1rem;
-  font-family: sans-serif;
 }

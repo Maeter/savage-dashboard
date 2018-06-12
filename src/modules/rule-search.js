@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import generateKey from 'shortid';
+
 import filter from 'lodash/filter';
 import throttle from 'lodash/throttle';
 import rules from '../assets/rules';
@@ -17,41 +19,48 @@ class RuleSearch extends Component {
     };
   }
 
-  updateTerm = (evt) => {
-    const rx = new RegExp(`${evt.target.value}`);
+  updateTerm = () => {
+    const val = this.input.value;
+    const rx = new RegExp(val);
     const results = filter(
       rules,
       (item) => item.keywords.reduce((acc, i) => acc || rx.test(i), false),
     ) || this.state.results; // Keep the previous selection if no match
     this.setState({
-      term: evt.target.value,
-      selected: results && results[0] || {},
+      term: val,
+      selected: results && (results[0] || {}),
       results,
     });
-  }
+  };
 
-  renderTexts = texts => texts && texts.map((t, i) => (<p key={i}>{t}</p>));
+  throttledUpdateTerm = throttle(this.updateTerm, 800);
+
+  renderTexts = texts =>
+    texts && texts.map((t, i) => (<p key={generateKey()}>{t}</p>));
 
   renderTables = tables => (
     <table>
-      {tables && tables.map((col, i) => (
-        <tr key={i}>
-          {col.map((val, j) => (<td>{val}</td>))}
-        </tr>
-      ))}
+      <tbody>
+        {tables && tables.map((col, i) => (
+          <tr key={generateKey()}>
+            {col.map((val, j) => (<td key={generateKey()}>{val}</td>))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 
   render() {
+    const { results, selected } = this.state;
     return (
       <div className={'rule-search'}>
         <h3>Search rules</h3>
-        <input type="text" onChange={this.updateTerm}/>
+        <input type="text" onChange={this.throttledUpdateTerm} ref={x => this.input = x}/>
         <br/>
-        {this.state.results.map((res, i) => <span key={i}>{res.id}, </span>)}
+        {results.map((res, i) => <span key={i}>{res.id}, </span>)}
         <br/>
         <br/>
-        {this.state.selected.keywords.map((k, i) => <span key={i}>{k}, </span>)}
+        {selected.keywords && selected.keywords.map((k, i) => <span key={i}>{k}, </span>)}
         <br/>
         <br/>
         {this.renderTexts(this.state.selected.texts)}
