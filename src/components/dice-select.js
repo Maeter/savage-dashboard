@@ -1,10 +1,20 @@
 import React from 'react';
-export default ({ trait }) => (
-  <label>
+
+export default ({ trait, id, onChange, value }) => (
+  <div>
     {
       [4, 6, 8, 10, 12].map((dice, i) => (
-        <input type="radio" name={trait} key={`${trait}-${dice}`}/>
+        <label key={`${trait}-${dice}`}>
+          {dice}:
+          <input
+            type="radio"
+            name={`${trait}-${id}`}
+            onChange={onChange}
+            value={dice}
+            checked={+value === dice}
+          />
+        </label>
       ))
     }
-  </label>
+  </div>
 );

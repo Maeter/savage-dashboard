@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import DiceSelect from '../components/dice-select';
 import { traitCheck } from '../services/dice';
 
 const CharacterNotice = ({ children, value, action }) => (
   <label>
     {children}
-    <input type="number" value={value} onChange={action}/>
+    <DiceSelect
+      trait={'notice'}
+      id={children}
+      onChange={action}
+      value={value}
+    />
     <br/>
   </label>
 );
@@ -19,6 +25,7 @@ class PerceptionCheck extends Component {
   }
 
   updateNotice = (name) => (evt) => {
+    console.log(name, evt.target.value);
     this.setState({
       characters: {
         ...this.state.characters,
@@ -59,7 +66,7 @@ class PerceptionCheck extends Component {
         {
           Object.keys(this.state.characters).map((name, i) => (
             <CharacterNotice
-              key={i}
+              key={`${name}-${i}`}
               value={this.state.characters[name]}
               action={this.updateNotice(name)}
             >
