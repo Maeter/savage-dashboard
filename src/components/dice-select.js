@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default ({ trait, id, onChange, value }) => (
-  <div>
+  <div className={'dice-select'}>
     {
       [4, 6, 8, 10, 12].map((dice, i) => (
         <label key={`${trait}-${dice}`}>

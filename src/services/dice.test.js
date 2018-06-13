@@ -26,6 +26,6 @@ describe('traitCheck fn', () => {
     // Rolled values below 6 (included), return 6,
     // otherwise the other value
     for(let i = 1; i<13; i++)
-      expect(dice.traitCheck(i, newRollFn)).toBe(i < 6 ? 6 : i);
+      expect(dice.traitCheck(i, true, newRollFn)).toBe(i < 6 ? 6 : i);
   })
 });

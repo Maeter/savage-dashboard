@@ -7,9 +7,7 @@ export const roll = (die, rollingFn = naturalRoll) => {
   return rolledVal === die ? rolledVal + roll(die, rollingFn) : rolledVal;
 };
 
-export const traitCheck = (die = 4, rollingFn = roll) => {
+export const traitCheck = (die = 4, isWildCard = true, rollingFn = roll, ) => {
   const dx = rollingFn(die);
-	const d6 = rollingFn(6);
-	const max = Math.max(dx, d6);
-	return max;
+	return isWildCard ? Math.max(dx, rollingFn(6)) : dx;
 };
