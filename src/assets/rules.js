@@ -24,5 +24,16 @@ export default [
       'Falling damage is calculates somehow...',
       'Snow: falling on snow whatever'
     ],
+  },
+  {
+    id: 'encumbrance',
+    keywords: ['encumbrance, weight'],
+    texts: [
+      'In general, you shouldn’t worry about Encumbrance. Characters will usually carry no more than their characters think they actually need. But occasionally it may become dramatically important—such as during a chase or when attempting to lug a heavy treasure away from a roaring dragon! When that occurs, use the guidelines below.',
+      'A character can carry five times his Strength die type in pounds without incurring any penalties. This is called his “Load Limit.” A character with a Strength of d8, for example, can comfortably carry 40 pounds. (Ignore normal clothes when figuring weight.)',
+      'Carrying too much weight inflicts a –1 penalty for every additional multiple of your Load Limit. The penalty applies to all Agility and Strength totals, as well as skills linked to either of those two attributes.',
+      'A hero with a d8 Strength, for example, has a Load Limit of 40 pounds. He can carry 41-80 pounds at a –1 penalty to his Strength, Agility, and related skill rolls. He could also carry 81-120 pounds at –2, or 121-160 pounds at –3.',
+      'Characters cannot regularly carry weight that inflicts a penalty of more than –3. They may be able to lift greater weights (up to a –4 penalty) for a few short steps at the discretion of the GM, however.',
+    ],
   }
 ]
