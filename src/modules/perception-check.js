@@ -1,6 +1,14 @@
-import React, { Component } from 'react';
-import DiceSelect from '../components/dice-select';
+import React, { Component, Fragment } from 'react';
+
 import { traitCheck } from '../services/dice';
+import Button from '../components/button';
+import DiceSelect from '../components/dice-select';
+import Input from '../components/input';
+import TraitResult from '../components/trait-result';
+
+const AddCharButton = Button.extend`
+  margin-left: 0.5rem;
+`;
 
 const CharacterNotice = ({ children, value, action }) => (
   <label>
@@ -35,12 +43,18 @@ class PerceptionCheck extends Component {
   }
 
   addCharacter = () => {
-    this.setState({
+    const rawName = this.newCharacter.value;
+    const name = rawName && (rawName[0].toUpperCase() + rawName.slice(1));
+    this.newCharacter.value && this.setState({
       characters: {
         ...this.state.characters,
-        [this.newCharacter.value]: 4,
+        [name]: 4,
+      },
+      rolls: {
+        ...this.state.rolls,
+        [name]: '-',
       }
-    }, () => { this.newCharacter.value = '' });
+    }, () => { this.newCharacter.value = '' }); // Reset form
   }
 
   perceptionCheck = () => {
@@ -59,32 +73,26 @@ class PerceptionCheck extends Component {
     return (
       <div className={'perception-check'}>
         <h3>Perception Check:</h3>
-        <input type="text" ref={nc => this.newCharacter = nc}/>
-        <button onClick={this.addCharacter}>Add character</button>
+        <Input type="text" innerRef={nc => this.newCharacter = nc} />
+        <AddCharButton onClick={this.addCharacter}>Add character</AddCharButton>
         <br />
         <br />
         {
           Object.keys(this.state.characters).map((name, i) => (
-            <CharacterNotice
-              key={`${name}-${i}`}
-              value={this.state.characters[name]}
-              action={this.updateNotice(name)}
-            >
-              {name}
-            </CharacterNotice>
+            <Fragment key={`${name}-${i}`}>
+              <CharacterNotice
+                key={`${name}-${i}`}
+                value={this.state.characters[name]}
+                action={this.updateNotice(name)}
+              >
+                {name}
+              </CharacterNotice>
+              <TraitResult roll={this.state.rolls[name]} isWildCard />
+            </Fragment>
           ))
         }
         <br />
-        <ul>
-          {
-            Object.keys(this.state.rolls).map((name, i) => (
-              <li key={i}>
-                {name}:{this.state.rolls[name]}
-              </li>
-            ))
-          }
-        </ul>
-        <button onClick={this.perceptionCheck}>Perception Check!</button>
+        <Button onClick={this.perceptionCheck}>Perception Check!</Button>
       </div>
     );
   }

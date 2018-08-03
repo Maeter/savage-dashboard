@@ -1,4 +1,5 @@
 
+
 export const naturalRoll = die =>
   Math.floor(Math.random() * die) + 1;
 
@@ -9,5 +10,10 @@ export const roll = (die, rollingFn = naturalRoll) => {
 
 export const traitCheck = (die = 4, isWildCard = true, rollingFn = roll, ) => {
   const dx = rollingFn(die);
-	return isWildCard ? Math.max(dx, rollingFn(6)) : dx;
+  const d6 = rollingFn(6);
+  return ({
+    trait: dx,
+    wild: isWildCard ? d6 : null,
+    result: isWildCard ? Math.max(dx, d6) : dx,
+  });
 };

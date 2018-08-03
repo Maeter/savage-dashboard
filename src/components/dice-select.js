@@ -1,7 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  display: inline-block;
+  margin-left: 1rem;
+`;
 
 export default ({ trait, id, onChange, value }) => (
-  <div className={'dice-select'}>
+  <Wrapper className={'dice-select'}>
     {
       [4, 6, 8, 10, 12].map((dice, i) => (
         <label key={`${trait}-${dice}`}>
@@ -16,5 +22,5 @@ export default ({ trait, id, onChange, value }) => (
         </label>
       ))
     }
-  </div>
+  </Wrapper>
 );
