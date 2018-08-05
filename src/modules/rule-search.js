@@ -4,6 +4,7 @@ import generateKey from 'shortid';
 import filter from 'lodash/filter';
 import throttle from 'lodash/throttle';
 import rules from '../assets/rules';
+import swdJson from '../assets/swd_json.json';
 
 class RuleSearch extends Component {
   constructor(props) {
@@ -17,6 +18,12 @@ class RuleSearch extends Component {
       },
       results: [],
     };
+  }
+
+  componentDidMount() {
+    const orderedPages = swdJson.pages.sort((a, b) => a.pageId - b.pageId);
+    console.log(orderedPages);
+    
   }
 
   updateTerm = () => {
