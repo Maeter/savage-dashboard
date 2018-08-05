@@ -21,9 +21,12 @@ class RuleSearch extends Component {
   }
 
   componentDidMount() {
-    const orderedPages = swdJson.pages.sort((a, b) => a.pageId - b.pageId);
-    console.log(orderedPages);
-    
+    const orderedpages = swdJson.pages
+      .sort((a, b) => a.pageId - b.pageId);
+    const orderedTexts = orderedpages
+      .reduce((acc, page) => [...acc, ...page.texts], []);
+    const titles = orderedTexts.filter((text) => text.fontSize === 15);
+    console.log(titles);
   }
 
   updateTerm = () => {
