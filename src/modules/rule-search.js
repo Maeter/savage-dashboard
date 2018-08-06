@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import filter from 'lodash/filter';
 import throttle from 'lodash/throttle';
-import swdJson from '../assets/swd_json.json';
+import ruleset from '../assets/swd_json.json';
 
 import Input from '../components/input';
 import Button from '../components/button';
@@ -37,25 +37,20 @@ class RuleSearch extends Component {
   }
 
   componentDidMount() {
-    const orderedpages = swdJson.pages
-      .sort((a, b) => a.pageId - b.pageId);
-    const orderedTexts = orderedpages
-      .reduce((acc, page) => [...acc, ...page.texts], []);
     let prevIndex = 0;
-    const titles = orderedTexts.filter(
+    const titles = ruleset.filter(
       (text, index) => {
         const isTitle = text.fontSize === 15 // Remove subtitles
           && isNaN(text.text) // Remove page numbers
           && text.text.indexOf('....') === -1; // Remove index entries
         if(isTitle) {
-          orderedTexts[prevIndex].indexEnd = index;
-          orderedTexts[index].indexStart = index;
+          ruleset[prevIndex].indexEnd = index;
+          ruleset[index].indexStart = index;
           prevIndex = index;
         }
         return isTitle;
     });
-    console.log(titles);
-    this.setState({ texts: orderedTexts, titles });
+    this.setState({ texts: ruleset, titles });
   }
 
   updateTerm = () => {
