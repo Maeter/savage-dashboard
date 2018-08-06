@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
 import generateKey from 'shortid';
+import styled from 'styled-components';
 
 import filter from 'lodash/filter';
 import throttle from 'lodash/throttle';
 import swdJson from '../assets/swd_json.json';
 
 import Input from '../components/input';
+import Button from '../components/button';
+
+// @todo: use grid :)
+const Term = styled(Button)`
+  margin: 0.5rem 0.5rem 0 0;
+  ${p => p.selected && `
+    background: #afafaf;
+    border: 2px black solid;
+  `}
+`;
 
 class RuleSearch extends Component {
   constructor(props) {
@@ -18,7 +29,10 @@ class RuleSearch extends Component {
         tables: [],
       },
       results: [],
-      selectedResult: null,
+      selectedResult: {
+        text: '',
+        index: null,
+      },
     };
   }
 
@@ -64,7 +78,10 @@ class RuleSearch extends Component {
     const { texts } = this.state;
     const range = texts.slice(item.indexStart + 1, item.indexEnd).map(i => i.text);
     this.setState({
-      selectedResult: range.join(''),
+      selectedResult: {
+        index: item.indexStart,
+        text: range.join(''),
+      }
     });
   }
 
@@ -77,12 +94,21 @@ class RuleSearch extends Component {
         <h3>Search rules</h3>
         <Input type="text" onChange={this.throttledUpdateTerm} innerRef={x => this.input = x}/>
         <br/>
-        {results.map((res, i) => <span key={i} onClick={() => this.displayRule(res)}>{res.text} </span>)}
+        {results.map((item, i) =>
+          <Term
+            key={i}
+            onClick={() => this.displayRule(item)}
+            selected={this.state.selectedResult.index === item.indexStart}
+            test={console.log(i, this.state.selectedResult.index === item.indexStart)}
+          >
+            {item.text}
+          </Term>
+        )}
         <br/>
         {selected.keywords && selected.keywords.map((k, i) => <span key={i}>{k}, </span>)}
         <br/>
         <br/>
-        <p>{this.state.selectedResult}</p>
+        <p>{this.state.selectedResult.text}</p>
         <br/>
       </div>
     );
