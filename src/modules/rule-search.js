@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import filter from 'lodash/filter';
 import throttle from 'lodash/throttle';
-import ruleset from '../assets/swd_json.json';
+import concat from 'lodash/concat';
+import rulesetCore from '../assets/swd_json.json';
+import ruleset50Fathoms from '../assets/50f_json.json';
 
 import Input from '../components/input';
 import Button from '../components/button';
@@ -38,9 +40,27 @@ class RuleSearch extends Component {
 
   componentDidMount() {
     let prevIndex = 0;
+    const ruleset = concat(rulesetCore, ruleset50Fathoms);
+    // const titles = [rulesetCore, ruleset50Fathoms].reduce((acc, ruleset) =>
+    //   concat(
+    //     acc,
+    //     ruleset.filter((text, index) => {
+    //       const isTitle = text.fontSize === 15 // Remove subtitles
+    //         && isNaN(text.text) // Remove page numbers
+    //         && text.text.indexOf('....') === -1; // Remove index entries
+    //       if(isTitle) {
+    //         ruleset[prevIndex].indexEnd = index;
+    //         ruleset[index].indexStart = index;
+    //         prevIndex = index;
+    //       }
+    //       return isTitle;
+    //     })
+    //   ),
+    //   []
+    // );
     const titles = ruleset.filter(
-      (text, index) => {
-        const isTitle = text.fontSize === 15 // Remove subtitles
+      (text, index) => { // titles on Deluxe (15), Titles on 50Fathoms (11)
+        const isTitle = text.fontSize === 15 || text.fontSize === 11
           && isNaN(text.text) // Remove page numbers
           && text.text.indexOf('....') === -1; // Remove index entries
         if(isTitle) {
