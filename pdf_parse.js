@@ -1,6 +1,6 @@
 var pdfParser = require('pdf-parser');
 var fs = require('fs');
-var PDF_PATH = 'swd.pdf';
+var PDF_PATH = '50f.pdf';
 
 pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
   if(error != null){
@@ -17,7 +17,7 @@ pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
         italic,
         text,
      }));
-    fs.writeFile('./swd_json.json', JSON.stringify(texts));
+    fs.writeFile('./50f_json.json', JSON.stringify(texts));
   }
 
 });
