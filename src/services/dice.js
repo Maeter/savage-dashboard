@@ -1,5 +1,4 @@
 
-
 export const naturalRoll = die =>
   Math.floor(Math.random() * die) + 1;
 
@@ -8,7 +7,11 @@ export const roll = (die, rollingFn = naturalRoll) => {
   return rolledVal === die ? rolledVal + roll(die, rollingFn) : rolledVal;
 };
 
-export const traitCheck = (die = 4, isWildCard = true, rollingFn = roll, ) => {
+export const traitCheck = (
+  die = 4,
+  isWildCard = true,
+  rollingFn = roll,
+) => {
   const dx = rollingFn(die);
   const d6 = rollingFn(6);
   return ({
