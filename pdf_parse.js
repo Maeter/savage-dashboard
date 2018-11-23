@@ -1,6 +1,7 @@
 var pdfParser = require('pdf-parser');
 var fs = require('fs');
-var PDF_PATH = '50f.pdf';
+
+var PDF_PATH = process.argv[2];
 
 pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
   if(error != null){
@@ -8,16 +9,24 @@ pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
   }else{
     const texts = pdf.pages
       .sort((a, b) => a.pageId - b.pageId)
-      .reduce((acc, page) => [...acc, ...page.texts], [])
-      .map(({ black, bold, color, fontSize, italic, text }) => ({
-        black,
-        bold,
-        color,
-        fontSize,
-        italic,
-        text,
-     }));
-    fs.writeFile('./50f_json.json', JSON.stringify(texts));
+      .reduce((acc, page, i) => {  
+        const updatedTexts = page.texts.slice(0);
+        // Update each text entry with its page number
+        return [...acc, { page: page.pageId }, ...updatedTexts];
+      }, [])
+      .map(({ black, bold, color, fontSize, italic, text, page }) =>
+        page
+          ? { page }
+          : {
+            black,
+            bold,
+            color,
+            fontSize,
+            italic,
+            text,
+          }
+      );
+    fs.writeFile('./parsed_book.json', JSON.stringify(texts));
   }
 
 });

@@ -37,11 +37,10 @@ describe('roll fn', () => {
     };
     const generatedRollFn = rollerFnGenerator();
     const rollFn = () => generatedRollFn.next().value;
-    expect(roll(4, rollFn)).toBe(1);
-    expect(roll(4, rollFn)).toBe(2);
-    expect(roll(4, rollFn)).toBe(3);
+    const expectFn = (expectation) => expect(roll(4, rollFn)).toBe(expectation);
+    [1, 2, 3].forEach(expectFn);
     // Rolls 4, explodes and then rolls 1
-    expect(roll(4, rollFn)).toBe(5);
+    expectFn(5);
   })
 });
 
