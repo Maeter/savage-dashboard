@@ -9,7 +9,7 @@ pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
   }else{
     const texts = pdf.pages
       .sort((a, b) => a.pageId - b.pageId)
-      .reduce((acc, page, i) => {  
+      .reduce((acc, page, i) => {
         const updatedTexts = page.texts.slice(0);
         // Update each text entry with its page number
         return [...acc, { page: page.pageId }, ...updatedTexts];
@@ -18,11 +18,8 @@ pdfParser.pdf2json(PDF_PATH, function (error, pdf) {
         page
           ? { page }
           : {
-            black,
-            bold,
-            color,
+            highlight: italic || black || bold || color !== "[0,0,0]",
             fontSize,
-            italic,
             text,
           }
       );

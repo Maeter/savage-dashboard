@@ -3,6 +3,7 @@ import generateKey from 'shortid';
 import styled from 'styled-components';
 
 import filter from 'lodash/filter';
+import uniqBy from 'lodash/uniqBy';
 import throttle from 'lodash/throttle';
 import concat from 'lodash/concat';
 
@@ -20,7 +21,7 @@ const Term = styled(Button)`
   `}
 `;
 
-const SelectedRule = styled.p`
+const SelectedRule = styled.section`
   line-height: 1.5;
 `;
 
@@ -36,7 +37,7 @@ class RuleSearch extends Component {
       term: '',
       results: [],
       selectedResult: {
-        text: '',
+        texts: [],
         index: null,
       },
     };
@@ -47,7 +48,6 @@ class RuleSearch extends Component {
       const { rulesets } = this.state;
       const val = this.input.value.toLowerCase();
       const rx = new RegExp(val);
-
       const results = Object.keys(rulesets).reduce((acc, rulesetKey) => {
         const currRuleset = rulesets[rulesetKey];
         acc[rulesetKey] = filter(
@@ -56,7 +56,7 @@ class RuleSearch extends Component {
         );
         return acc;
       }, {});
-
+      console.log(results);
       this.setState({
         term: val,
         results,
@@ -64,17 +64,54 @@ class RuleSearch extends Component {
     }
   };
 
-  displayRule = (item) => {
-    const { texts } = this.state.rulesets[item.book];
-    const range = texts
-      .slice(item.indexStart + 1, item.indexEnd)
-      .map(i => i.text);
+  displayRule = (rule) => {
+    const { results } = this.state;
+    console.log(results[rule.book], results[rule.book].filter(item => item.text === rule.text));
+    const { ruleset } = this.state.rulesets[rule.book];
+    const texts = results[rule.book]
+      .filter(item => item.text === rule.text)
+      .map((item, i) => ruleset
+        .slice(item.indexStart + 1, item.indexEnd)
+        .map(i => i.text)
+        .join('')
+      );
+    // const range = ruleset
+    //   .slice(rule.indexStart + 1, rule.indexEnd)
+    //   .map(i => i.text);
     this.setState({
       selectedResult: {
-        index: item.indexStart,
-        text: range.join(''),
+        index: rule.indexStart,
+        texts, //range.join(''),
       }
     });
+  }
+
+  listUniqueRules = (list, selectedItem) => {
+    const keywords = [];
+    return Object.keys(list).map((rulesetName, index) => {
+      const currRuleset = list[rulesetName];
+      const dashedRulesetName = rulesetName.toLowerCase().replace(' ', '-');
+      return currRuleset.length === 0 ? null : (
+        <section className={`rules-${dashedRulesetName}`} key={`rules-${dashedRulesetName}-${index}`}>
+          <SectionTitle>{rulesetName}</SectionTitle>
+          {
+            currRuleset.map((item, i) => {
+              const repeated = keywords.includes(item.text);
+              repeated || keywords.push(item.text);
+              return repeated ? null : (
+                <Term
+                  key={i}
+                  onClick={() => this.displayRule(item)}
+                  selected={selectedItem.index === item.indexStart}
+                >
+                  {item.text}
+                </Term>
+              );
+            })
+          }
+        </section>
+      );
+    })
   }
 
   throttledUpdateTerm = throttle(this.updateTerm, 800);
@@ -83,32 +120,17 @@ class RuleSearch extends Component {
     const { results, selectedResult } = this.state;
     return (
       <div className={'rule-search'}>
-        <h3>Search rules</h3>
+        <h3>Search rules (Beta)</h3>
         <Input type="text" onChange={this.throttledUpdateTerm} innerRef={x => this.input = x}/>
         <br/>
-        {Object.keys(results).map((rulesetName) => {
-          const currRuleset = results[rulesetName];
-          const dashedRulesetName = rulesetName.toLowerCase().replace(' ', '-');
-          return currRuleset.length === 0 ? null : (
-            <section class={`rules-${dashedRulesetName}`}>
-              <SectionTitle>{rulesetName}</SectionTitle>
-              {
-                currRuleset.map((item, i) =>
-                  <Term
-                    key={i}
-                    onClick={() => this.displayRule(item)}
-                    selected={selectedResult.index === item.indexStart}
-                  >
-                    {item.text}
-                  </Term>
-                )
-              }
-            </section>
-          );
-        })}
+        {this.listUniqueRules(results, selectedResult)}
         <br/>
         <br/>
-        <SelectedRule>{this.state.selectedResult.text}</SelectedRule>
+        <SelectedRule>
+          <ul>
+            {this.state.selectedResult.texts.filter(t => !!t).map((t, i) => <li key={i}>{t}</li>)}
+          </ul>
+        </SelectedRule>
         <br/>
       </div>
     );
