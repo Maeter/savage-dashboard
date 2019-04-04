@@ -1,0 +1,12 @@
+version: "3"
+services:
+  node:
+    image: node:11-alpine
+    container_name: savage-dashboard
+    volumes:
+        - "./:/app:cached"
+    ports:
+        - "3000:3000"
+    working_dir: /app
+    tty: true
+

@@ -18,6 +18,16 @@ Savage Dashboard is ment to be a full-fledged interactive Game Master Screen for
 - Migration to standalone desktop app
 
 
+## Setup local environment
+
+This project is dockerized, so you don't need install node. 
+
+Run `docker-compose up -d` to set up the docker.
+
+Run `docker exec -it savage-dashboard sh` to access at the machine console.
+
+Run `npm install` to get all dependencies.
+
 ## Available Scripts
 
 In the project directory, you can run:
